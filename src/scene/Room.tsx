@@ -329,7 +329,7 @@ export function Room() {
 
       <Model url={MODEL.plant} position={[4.2, 0, -3.1]} scale={1.35} rotation={[0, 0.6, 0]} />
       <Model url={MODEL.plant} position={[-4.2, 0, 1.7]} scale={1.2} rotation={[0, -1.2, 0]} />
-      <Model url={MODEL.ottoman} position={[3.6, 0, 0.9]} scale={1.05} rotation={[0, -0.5, 0]} />
+      <Model url={MODEL.ottoman} position={[-3.3, 0, 1.5]} scale={1.05} rotation={[0, 0.6, 0]} />
       <Model url={MODEL.basket} position={[2.9, 0, -2.4]} scale={1.3} rotation={[0, 0.4, 0]} />
       <Door position={[4.97, 1.25, 2.1]} />
       <Drone />

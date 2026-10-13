@@ -250,3 +250,29 @@ function ServerBox({ position }: { position: [number, number, number] }) {
     </group>
   );
 }
+
+/* ── Tech desk corner against the right wall ──────────────────────────── */
+
+export function DeskCorner({ position }: { position: [number, number, number] }) {
+  const glow = useRef<THREE.PointLight>(null);
+  useFrame((state) => {
+    if (glow.current) glow.current.intensity = stage.live ? 1.6 + Math.sin(state.clock.elapsedTime * 2.2) * 0.3 : 0.2;
+  });
+  return (
+    <group position={position} rotation={[0, -Math.PI / 2, 0]}>
+      {/* Desk (2 m wide) along the wall */}
+      <Model url={MODEL.desk} />
+      {/* Monitor + keyboard + mouse + modern laptop on top (desk height 0.79) */}
+      <group position={[0, 0.79, 0]}>
+        <Model url={MODEL.monitor} position={[0.25, 0, -0.15]} scale={1.35} rotation={[0, Math.PI, 0]} />
+        <Model url={MODEL.keyboard} position={[0.1, 0, 0.3]} scale={1.3} rotation={[0, Math.PI, 0]} />
+        <Model url={MODEL.mouse} position={[0.58, 0, 0.25]} scale={1.2} rotation={[0, Math.PI, 0]} />
+        <Model url={MODEL.modernLaptop} position={[-0.6, 0, 0.15]} scale={1.4} rotation={[0, Math.PI + 0.4, 0]} />
+        <Model url={MODEL.deskLamp} position={[0.8, 0.0, -0.25]} scale={0.95} rotation={[0, -0.6, 0]} />
+        <pointLight ref={glow} position={[0.25, 0.45, 0.2]} color={PALETTE.cobalt} intensity={1.6} distance={2.5} />
+      </group>
+      {/* Chair pulled out toward the room */}
+      <Model url={MODEL.armChair} position={[0.05, 0, 0.95]} rotation={[0, Math.PI, 0]} scale={0.95} />
+    </group>
+  );
+}

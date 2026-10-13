@@ -21,7 +21,22 @@ export const MODEL = {
   shelf: "/models/wooden_display_shelves_01.glb",
   basket: "/models/wicker_basket_01.glb",
   ottoman: "/models/Ottoman_01.glb",
+  desk: "/models/metal_office_desk.glb",
+  deskLamp: "/models/desk_lamp_arm_01.glb",
+  armChair: "/models/modern_arm_chair_01.glb",
+  // Kenney Furniture Kit (CC0) — modern laptop + monitor + keyboard + mouse
+  modernLaptop: "/models/kenney/laptop.glb",
+  monitor: "/models/kenney/computerScreen.glb",
+  keyboard: "/models/kenney/computerKeyboard.glb",
+  mouse: "/models/kenney/computerMouse.glb",
 } as const;
+
+/**
+ * Optional real avatar (rigged GLB with a Mixamo/Ready Player Me skeleton).
+ * Set to a URL such as "/models/younis.glb" or "https://models.readyplayer.me/<id>.glb";
+ * leave null to use the code-built low-poly avatar.
+ */
+export const AVATAR_URL: string | null = null;
 
 const DRACO = "/draco/";
 
