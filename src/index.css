@@ -1,0 +1,156 @@
+@import "tailwindcss";
+
+/* ───────────────────────────────────────────────────────────────────────────
+   YOUNIS DANY — "Qamariya" design system
+   Light, strange, sharp. Chalk-white gypsum surfaces lit by the colored
+   glass of a Yemeni qamariya window: ruby, cobalt, saffron, emerald.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  --color-chalk: #f6f3ee;
+  --color-chalk-deep: #ece7df;
+  --color-paper: #ffffff;
+  --color-ink: #16151a;
+  --color-ink-soft: #4a4850;
+  --color-ink-mute: #8a8791;
+
+  --color-ruby: #ff2e4d;
+  --color-ruby-deep: #d4123a;
+  --color-cobalt: #2a5bff;
+  --color-cobalt-deep: #1b3fc4;
+  --color-saffron: #ffb300;
+  --color-emerald: #0ec28b;
+  --color-lime: #d4ff2e;
+  --color-magenta: #ff3dc0;
+
+  --font-display: "Space Grotesk", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans Arabic", "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-blink: blink 1.4s steps(2, start) infinite;
+  --animate-spin-slow: spin 18s linear infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) rotate(-1deg);
+    }
+    50% {
+      transform: translate3d(0, -12px, 0) rotate(1deg);
+    }
+  }
+  @keyframes blink {
+    to {
+      visibility: hidden;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-chalk text-ink font-sans antialiased;
+    overflow-x: hidden;
+  }
+  :lang(ar) {
+    line-height: 1.8;
+  }
+  :lang(ar) .font-display {
+    letter-spacing: 0;
+  }
+  ::selection {
+    background: var(--color-lime);
+    color: var(--color-ink);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility text-display-2xl {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 8vw, 7rem);
+  line-height: 1.02;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+@utility text-display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5.5vw, 4.5rem);
+  line-height: 1.06;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+@utility text-display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3.6vw, 2.8rem);
+  line-height: 1.12;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+@utility text-display-md {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Hard-edged "sharp" shadow — the house style for cards and buttons. */
+@utility shadow-sharp {
+  box-shadow: 6px 6px 0 0 var(--color-ink);
+}
+@utility shadow-sharp-sm {
+  box-shadow: 3px 3px 0 0 var(--color-ink);
+}
+@utility shadow-sharp-ruby {
+  box-shadow: 6px 6px 0 0 var(--color-ruby);
+}
+@utility shadow-sharp-cobalt {
+  box-shadow: 6px 6px 0 0 var(--color-cobalt);
+}
+
+/* Chalk halo so headlines stay legible over the 3D stage */
+@utility text-halo {
+  text-shadow:
+    0 0 2px var(--color-chalk),
+    0 0 10px var(--color-chalk),
+    0 0 24px var(--color-chalk),
+    0 2px 40px rgba(246, 243, 238, 0.9);
+}
+
+/* Qamariya gradient text */
+@utility text-qamariya {
+  background: linear-gradient(100deg, var(--color-ruby) 0%, var(--color-cobalt) 45%, var(--color-saffron) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Glass over the 3D stage */
+@utility glass-light {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px) saturate(1.3);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  border: 1.5px solid var(--color-ink);
+}
+
+/* Dotted gypsum pattern for page backgrounds */
+@utility bg-gypsum {
+  background-color: var(--color-chalk);
+  background-image: radial-gradient(rgba(22, 21, 26, 0.09) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
