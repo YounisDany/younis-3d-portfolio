@@ -9,11 +9,10 @@ import { stage, smoothstep } from "./stage";
  */
 const STOPS: { pos: [number, number, number]; look: [number, number, number] }[] = [
   { pos: [0.3, 2.1, 6.6], look: [0, 1.0, -1.6] }, // entrance — wide
-  { pos: [-1.6, 1.7, 1.0], look: [-0.6, 0.95, -2.5] }, // laptop
+  { pos: [1.5, 1.75, 2.5], look: [4.3, 0.95, 0.3] }, // desk — Younis at work
   { pos: [2.2, 1.85, 0.6], look: [4.9, 1.85, -1.0] }, // frame
   { pos: [-2.0, 1.95, 0.5], look: [-4.9, 1.9, -1.5] }, // shelf
-  { pos: [0.4, 1.35, 0.7], look: [1.0, 0.5, -0.75] }, // phone
-  { pos: [1.4, 1.7, 2.3], look: [3.9, 0.85, 0.3] }, // desk corner
+  { pos: [-0.9, 1.4, 1.3], look: [-0.2, 0.5, -0.6] }, // table + phone
 ];
 
 const _p = new THREE.Vector3();

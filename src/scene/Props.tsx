@@ -198,22 +198,15 @@ export function Shelf({ position }: { position: [number, number, number] }) {
         <Model url={MODEL.diyaLantern} position={[-0.55, -0.62, -0.2]} scale={0.9} />
         <Model url={MODEL.lantern} position={[0.1, -0.62, -0.2]} scale={1.1} rotation={[0, 0.5, 0]} />
         <Model url={MODEL.basket} position={[0.6, -0.62, -0.2]} scale={0.9} rotation={[0, 0.3, 0]} />
-        {/* Middle shelf: design + code tiles */}
+        {/* Middle shelf: design + code tiles, evenly spaced */}
         {labels.map((tex, i) => (
-          <mesh key={i} position={[-0.5 + i * 0.3, -0.08, -0.2]} castShadow>
+          <mesh key={i} position={[-0.45 + i * 0.3, -0.08, -0.2]} castShadow>
             <boxGeometry args={[0.24, 0.24, 0.07]} />
             <meshStandardMaterial map={tex} roughness={0.4} />
           </mesh>
         ))}
-        {/* Paint cans next to the tiles */}
-        {[PALETTE.ruby, PALETTE.cobalt, PALETTE.saffron].map((c, i) => (
-          <mesh key={c} position={[-0.6 + i * 0.17, -1.08, -0.2]} castShadow>
-            <cylinderGeometry args={[0.065, 0.065, 0.2, 14]} />
-            <meshStandardMaterial color={c} roughness={0.5} />
-          </mesh>
-        ))}
-        {/* Tiny server box with blinking LEDs */}
-        <ServerBox position={[0.45, -1.1, -0.2]} />
+        {/* Lower shelf: the little server, centred */}
+        <ServerBox position={[0, -1.1, -0.2]} />
       </group>
     </Hotspot>
   );
@@ -254,25 +247,28 @@ function ServerBox({ position }: { position: [number, number, number] }) {
 /* ── Tech desk corner against the right wall ──────────────────────────── */
 
 export function DeskCorner({ position }: { position: [number, number, number] }) {
+  const { t } = useLang();
   const glow = useRef<THREE.PointLight>(null);
   useFrame((state) => {
     if (glow.current) glow.current.intensity = stage.live ? 1.6 + Math.sin(state.clock.elapsedTime * 2.2) * 0.3 : 0.2;
   });
   return (
-    <group position={position} rotation={[0, -Math.PI / 2, 0]}>
-      {/* Desk (2 m wide) along the wall */}
-      <Model url={MODEL.desk} />
-      {/* Monitor + keyboard + mouse + modern laptop on top (desk height 0.79) */}
-      <group position={[0, 0.79, 0]}>
-        <Model url={MODEL.monitor} position={[0.25, 0, -0.15]} scale={1.35} rotation={[0, Math.PI, 0]} />
-        <Model url={MODEL.keyboard} position={[0.1, 0, 0.3]} scale={1.3} rotation={[0, Math.PI, 0]} />
-        <Model url={MODEL.mouse} position={[0.58, 0, 0.25]} scale={1.2} rotation={[0, Math.PI, 0]} />
-        <Model url={MODEL.modernLaptop} position={[-0.6, 0, 0.15]} scale={1.4} rotation={[0, Math.PI + 0.4, 0]} />
-        <Model url={MODEL.deskLamp} position={[0.8, 0.0, -0.25]} scale={0.95} rotation={[0, -0.6, 0]} />
-        <pointLight ref={glow} position={[0.25, 0.45, 0.2]} color={PALETTE.cobalt} intensity={1.6} distance={2.5} />
+    <Hotspot id="laptop" to="/projects" label={t.room.laptop} position={position} ringRadius={1.1} labelOffset={[-0.6, 1.5, 0]}>
+      <group rotation={[0, -Math.PI / 2, 0]}>
+        {/* Desk (2 m wide) flush against the wall */}
+        <Model url={MODEL.desk} />
+        {/* Monitor centred, keyboard + mouse in front, laptop left, lamp right (desk height 0.79) */}
+        <group position={[0, 0.79, 0]}>
+          <Model url={MODEL.monitor} position={[0.2, 0, -0.22]} scale={1.35} rotation={[0, Math.PI, 0]} />
+          <Model url={MODEL.keyboard} position={[0.14, 0, 0.22]} scale={1.3} rotation={[0, Math.PI, 0]} />
+          <Model url={MODEL.mouse} position={[0.52, 0, 0.18]} scale={1.2} rotation={[0, Math.PI, 0]} />
+          <Model url={MODEL.modernLaptop} position={[-0.55, 0, 0.0]} scale={1.4} rotation={[0, Math.PI + 0.35, 0]} />
+          <Model url={MODEL.deskLamp} position={[0.82, 0.0, -0.3]} scale={0.95} rotation={[0, -0.6, 0]} />
+          <pointLight ref={glow} position={[0.2, 0.45, 0.2]} color={PALETTE.cobalt} intensity={1.6} distance={2.5} />
+        </group>
+        {/* Chair tucked in, facing the desk */}
+        <Model url={MODEL.armChair} position={[0.05, 0, 0.9]} rotation={[0, 0, 0]} scale={0.95} />
       </group>
-      {/* Chair pulled out toward the room */}
-      <Model url={MODEL.armChair} position={[0.05, 0, 0.95]} rotation={[0, Math.PI, 0]} scale={0.95} />
-    </group>
+    </Hotspot>
   );
 }

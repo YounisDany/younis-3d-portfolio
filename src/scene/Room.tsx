@@ -3,6 +3,7 @@ import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { PALETTE, stage } from "./stage";
 import { carpetTexture } from "./textures";
+import { RoundedBox } from "@react-three/drei";
 import { Model, MODEL } from "./Models";
 
 /* ── Materials shared across the room ─────────────────────────────────── */
@@ -113,7 +114,7 @@ function LightPools() {
     refs.current.forEach((m, i) => {
       if (!m) return;
       const mat = m.material as THREE.MeshBasicMaterial;
-      mat.opacity = 0.16 + Math.sin(t * 0.5 + i) * 0.04;
+      mat.opacity = 0.09 + Math.sin(t * 0.5 + i) * 0.02;
     });
   });
   const pools: { x: number; z: number; color: string; w: number; h: number }[] = [
@@ -177,6 +178,26 @@ function Mattress({ position, rotation = [0, 0, 0], length }: { position: [numbe
       </mesh>
       <mesh position={[0, 0.115, 0]}>
         <boxGeometry args={[length, 0.012, 0.2]} />
+        <meshStandardMaterial color={PALETTE.saffron} roughness={0.9} />
+      </mesh>
+    </group>
+  );
+}
+
+/* ── Backrest cushion — rounded, uniform, with saffron piping ─────────── */
+
+function Backrest({ position, rotation = [0, 0, 0] }: { position: [number, number, number]; rotation?: [number, number, number] }) {
+  return (
+    <group position={position} rotation={rotation}>
+      <RoundedBox args={[1.3, 0.9, 0.28]} radius={0.07} smoothness={4} castShadow receiveShadow>
+        <meshStandardMaterial color={PALETTE.rubyDeep} roughness={0.95} />
+      </RoundedBox>
+      <mesh position={[0, 0.2, 0.145]}>
+        <boxGeometry args={[1.3, 0.025, 0.01]} />
+        <meshStandardMaterial color={PALETTE.saffron} roughness={0.9} />
+      </mesh>
+      <mesh position={[0, -0.2, 0.145]}>
+        <boxGeometry args={[1.3, 0.025, 0.01]} />
         <meshStandardMaterial color={PALETTE.saffron} roughness={0.9} />
       </mesh>
     </group>
@@ -276,21 +297,23 @@ export function Room() {
 
       {/* Seating along the back wall */}
       <Mattress position={[0, 0.11, -3.25]} length={8.6} />
-      {/* Real throw pillows as backrests along the back wall */}
-      {[-3.2, -1.6, 0, 1.6, 3.2].map((x) => (
-        <Model key={x} url={MODEL.pillows} position={[x, 0.2, -3.5]} scale={1.45} />
+      {/* Uniform backrest cushions — one continuous row, equal gaps */}
+      {[-3.5, -2.1, -0.7, 0.7, 2.1, 3.5].map((x) => (
+        <Backrest key={x} position={[x, 0.68, -3.72]} />
       ))}
+      {/* One decorative pillow set at each end of the row */}
+      <Model url={MODEL.pillows} position={[-3.9, 0.2, -3.2]} rotation={[0, 0.6, 0]} scale={1.1} />
+      <Model url={MODEL.pillows} position={[3.9, 0.2, -3.2]} rotation={[0, -0.6, 0]} scale={1.1} />
 
       {/* Seating along the left wall */}
       <Mattress position={[-4.3, 0.11, -0.9]} rotation={[0, Math.PI / 2, 0]} length={3.6} />
-      {[-2.2, -0.7].map((z) => (
-        <Model key={z} url={MODEL.pillows} position={[-4.5, 0.2, z]} rotation={[0, Math.PI / 2, 0]} scale={1.45} />
+      {[-2.4, -1.0, 0.4].map((z) => (
+        <Backrest key={z} position={[-4.72, 0.68, z]} rotation={[0, Math.PI / 2, 0]} />
       ))}
 
-      <Model url={MODEL.plant} position={[4.2, 0, -3.1]} scale={1.35} rotation={[0, 0.6, 0]} />
-      <Model url={MODEL.plant} position={[-4.2, 0, 1.7]} scale={1.2} rotation={[0, -1.2, 0]} />
-      <Model url={MODEL.ottoman} position={[-3.3, 0, 1.5]} scale={1.05} rotation={[0, 0.6, 0]} />
-      <Model url={MODEL.basket} position={[4.35, 0, -2.2]} scale={1.3} rotation={[0, 0.4, 0]} />
+      {/* Plants mirrored in the two back corners */}
+      <Model url={MODEL.plant} position={[4.3, 0, -3.3]} scale={1.3} rotation={[0, 0.6, 0]} />
+      <Model url={MODEL.plant} position={[-4.3, 0, -3.3]} scale={1.3} rotation={[0, -2.2, 0]} />
       <Door position={[4.97, 1.25, 2.1]} />
 
       {/* Hidden material ref so the neon flicker can be shared */}

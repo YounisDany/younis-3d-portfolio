@@ -49,9 +49,9 @@ export const en = {
       cta: "Who I am",
     },
     {
-      kicker: "02 · The laptop",
+      kicker: "02 · The desk",
       title: "Real products, shipped.",
-      body: "Point-of-sale systems, business platforms, mobile apps, bots, and open-source libraries — built end to end for real clients.",
+      body: "This is where the code gets written: point-of-sale systems, business platforms, mobile apps, bots, and open-source libraries — built end to end for real clients.",
       cta: "See the projects",
     },
     {
@@ -71,12 +71,6 @@ export const en = {
       title: "Got an idea? Call the majlis.",
       body: "WhatsApp, email, GitHub, Instagram — pick whichever is closest to you. I usually answer within a day or two.",
       cta: "Get in touch",
-    },
-    {
-      kicker: "06 · The desk",
-      title: "Where the code gets written.",
-      body: "A real desk in the corner of the majlis: monitor, keyboard, a modern laptop and a lamp for the late nights. Tradition on the floor, technology on the desk.",
-      cta: "See what I build here",
     },
   ],
 

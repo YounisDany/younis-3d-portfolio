@@ -6,7 +6,7 @@ import { Room } from "./Room";
 import { Avatar } from "./Avatar";
 import { RealAvatar } from "./RealAvatar";
 import { DeskCorner } from "./Props";
-import { CoffeeTable, Frame, Laptop, Phone, Shelf } from "./Props";
+import { CoffeeTable, Frame, Phone, Shelf } from "./Props";
 import { CameraRig } from "./CameraRig";
 import { PALETTE } from "./stage";
 import { AVATAR_URL, preloadModels } from "./Models";
@@ -56,17 +56,18 @@ export function Stage({ quality, label }: { quality: "high" | "low"; label: stri
 
       <CameraRig interactive={high} />
 
-      {AVATAR_URL ? <RealAvatar url={AVATAR_URL} position={[-0.6, 0.22, -2.8]} scale={0.4} rotation={[0, 0.15, 0]} /> : <Avatar position={[-0.6, 0.22, -2.75]} />}
-      <Phone position={[0.95, 0.507, -0.72]} />
+      {AVATAR_URL ? (
+        <RealAvatar url={AVATAR_URL} position={[3.62, 0.4, 0.4]} scale={0.4} rotation={[0, Math.PI / 2, 0]} />
+      ) : (
+        <Avatar position={[-0.6, 0.22, -2.75]} />
+      )}
+      <Phone position={[-0.42, 0.507, -0.42]} />
       {/* Walls, carpet and every GLB prop render immediately (each model streams behind its own Suspense) */}
       <Room />
-      <CoffeeTable position={[1.3, 0, -1.25]} />
+      <CoffeeTable position={[0, 0, -0.9]} />
       <Shelf position={[-4.78, 1.95, -1.5]} />
-      <DeskCorner position={[4.0, 0, 0.35]} />
+      <DeskCorner position={[4.5, 0, 0.35]} />
       {/* Texture-backed props wait only for their own images */}
-      <Suspense fallback={null}>
-        <Laptop position={[-0.55, 0.03, -1.9]} />
-      </Suspense>
       <Suspense fallback={null}>
         <Frame position={[4.93, 1.85, -1.0]} />
       </Suspense>

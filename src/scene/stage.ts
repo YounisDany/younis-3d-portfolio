@@ -4,7 +4,7 @@
  * camera rig; written by listeners in the Home page.
  */
 
-export const STOP_COUNT = 6;
+export const STOP_COUNT = 5;
 
 export type HotspotId = "laptop" | "frame" | "shelf" | "phone";
 

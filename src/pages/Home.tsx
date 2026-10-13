@@ -9,7 +9,7 @@ import { stage, STOP_COUNT, stopAt } from "../scene/stage";
 import { Intro } from "../components/Intro";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
-const TOUR_ROUTES = ["/about", "/projects", "/about", "/skills", "/contact", "/projects"];
+const TOUR_ROUTES = ["/about", "/projects", "/about", "/skills", "/contact"];
 
 /** Scroll, pointer and drag listeners feeding the stage store. */
 function useStageInput(container: React.RefObject<HTMLDivElement | null>) {
