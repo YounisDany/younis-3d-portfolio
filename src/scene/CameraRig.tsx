@@ -13,6 +13,7 @@ const STOPS: { pos: [number, number, number]; look: [number, number, number] }[]
   { pos: [2.2, 1.85, 0.6], look: [4.9, 1.85, -1.0] }, // frame
   { pos: [-2.0, 1.95, 0.5], look: [-4.9, 1.9, -1.5] }, // shelf
   { pos: [0.7, 1.35, 0.6], look: [1.35, 0.5, -0.8] }, // phone
+  { pos: [1.4, 1.7, 2.3], look: [3.9, 0.85, 0.3] }, // desk corner
 ];
 
 const _p = new THREE.Vector3();

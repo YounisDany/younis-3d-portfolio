@@ -72,6 +72,12 @@ export const en = {
       body: "WhatsApp, email, GitHub, Instagram — pick whichever is closest to you. I usually answer within a day or two.",
       cta: "Get in touch",
     },
+    {
+      kicker: "06 · The desk",
+      title: "Where the code gets written.",
+      body: "A real desk in the corner of the majlis: monitor, keyboard, a modern laptop and a lamp for the late nights. Tradition on the floor, technology on the desk.",
+      cta: "See what I build here",
+    },
   ],
 
   about: {
