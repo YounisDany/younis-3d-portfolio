@@ -36,7 +36,7 @@ export const MODEL = {
  * Set to a URL such as "/models/younis.glb" or "https://models.readyplayer.me/<id>.glb";
  * leave null to use the code-built low-poly avatar.
  */
-export const AVATAR_URL: string | null = null;
+export const AVATAR_URL: string | null = "/models/younis.glb";
 
 const DRACO = "/draco/";
 

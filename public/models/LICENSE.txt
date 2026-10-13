@@ -8,3 +8,5 @@ throw_pillows_01, wicker_basket_01, wooden_display_shelves_01
 
 Kenney Furniture Kit models in kenney/ (laptop, computerScreen, computerKeyboard, computerMouse, chairDesk) are CC0 by Kenney (www.kenney.nl) — see kenney/LICENSE.txt.
 metal_office_desk, desk_lamp_arm_01, modern_arm_chair_01 are also CC0 from Poly Haven.
+
+younis.glb is "Man" by Quaternius (CC0) via poly.pizza (https://poly.pizza/m/HMnuH5geEG), recolored at runtime.

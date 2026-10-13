@@ -183,15 +183,6 @@ function Mattress({ position, rotation = [0, 0, 0], length }: { position: [numbe
   );
 }
 
-function ArmCushion({ position, color }: { position: [number, number, number]; color: string }) {
-  return (
-    <mesh position={position} rotation={[0, 0, Math.PI / 2]} castShadow>
-      <cylinderGeometry args={[0.2, 0.2, 0.6, 16]} />
-      <meshStandardMaterial color={color} roughness={0.9} />
-    </mesh>
-  );
-}
-
 /* ── Door + beams ──────────────────────────────────────────────── */
 
 function Door({ position }: { position: [number, number, number] }) {
@@ -218,35 +209,6 @@ function Door({ position }: { position: [number, number, number] }) {
       {/* Chalk arch surround */}
       <mesh position={[0, 1.25, -0.03]} material={chalkDeep}>
         <ringGeometry args={[0.62, 0.8, 24, 1, 0, Math.PI]} />
-      </mesh>
-    </group>
-  );
-}
-
-/* ── Tech drone — a small bobbing helper near the ceiling ─────────────── */
-
-function Drone() {
-  const g = useRef<THREE.Group>(null);
-  useFrame((state) => {
-    if (!g.current) return;
-    const t = state.clock.elapsedTime;
-    g.current.position.set(2.2 + Math.sin(t * 0.4) * 1.2, 2.9 + Math.sin(t * 1.3) * 0.12, -1.2 + Math.cos(t * 0.35) * 0.8);
-    g.current.rotation.y = t * 0.6;
-    g.current.rotation.z = Math.sin(t * 0.8) * 0.15;
-  });
-  return (
-    <group ref={g}>
-      <mesh>
-        <sphereGeometry args={[0.16, 18, 18]} />
-        <meshStandardMaterial color={PALETTE.chalk} roughness={0.4} metalness={0.2} />
-      </mesh>
-      <mesh position={[0, 0, 0.15]}>
-        <sphereGeometry args={[0.05, 12, 12]} />
-        <meshStandardMaterial color={PALETTE.cobalt} emissive={PALETTE.cobalt} emissiveIntensity={2} toneMapped={false} />
-      </mesh>
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.26, 0.018, 8, 40]} />
-        <meshStandardMaterial color={PALETTE.emerald} emissive={PALETTE.emerald} emissiveIntensity={1.4} toneMapped={false} />
       </mesh>
     </group>
   );
@@ -315,24 +277,21 @@ export function Room() {
       {/* Seating along the back wall */}
       <Mattress position={[0, 0.11, -3.25]} length={8.6} />
       {/* Real throw pillows as backrests along the back wall */}
-      {[-3.3, -1.65, 0, 1.65, 3.3].map((x, i) => (
-        <Model key={x} url={MODEL.pillows} position={[x, 0.2, -3.45]} rotation={[0, (i % 2 ? -1 : 1) * 0.08, 0]} scale={1.7} />
+      {[-3.2, -1.6, 0, 1.6, 3.2].map((x) => (
+        <Model key={x} url={MODEL.pillows} position={[x, 0.2, -3.5]} scale={1.45} />
       ))}
-      <ArmCushion position={[-4.1, 0.42, -3.25]} color={PALETTE.saffron} />
-      <ArmCushion position={[4.1, 0.42, -3.25]} color={PALETTE.cobalt} />
 
       {/* Seating along the left wall */}
       <Mattress position={[-4.3, 0.11, -0.9]} rotation={[0, Math.PI / 2, 0]} length={3.6} />
-      {[-2.1, -0.2].map((z) => (
-        <Model key={z} url={MODEL.pillows} position={[-4.45, 0.2, z]} rotation={[0, Math.PI / 2, 0]} scale={1.6} />
+      {[-2.2, -0.7].map((z) => (
+        <Model key={z} url={MODEL.pillows} position={[-4.5, 0.2, z]} rotation={[0, Math.PI / 2, 0]} scale={1.45} />
       ))}
 
       <Model url={MODEL.plant} position={[4.2, 0, -3.1]} scale={1.35} rotation={[0, 0.6, 0]} />
       <Model url={MODEL.plant} position={[-4.2, 0, 1.7]} scale={1.2} rotation={[0, -1.2, 0]} />
       <Model url={MODEL.ottoman} position={[-3.3, 0, 1.5]} scale={1.05} rotation={[0, 0.6, 0]} />
-      <Model url={MODEL.basket} position={[2.9, 0, -2.4]} scale={1.3} rotation={[0, 0.4, 0]} />
+      <Model url={MODEL.basket} position={[4.35, 0, -2.2]} scale={1.3} rotation={[0, 0.4, 0]} />
       <Door position={[4.97, 1.25, 2.1]} />
-      <Drone />
 
       {/* Hidden material ref so the neon flicker can be shared */}
       <mesh visible={false}>
