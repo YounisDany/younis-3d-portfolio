@@ -7,6 +7,9 @@ import { Avatar } from "./Avatar";
 import { CoffeeTable, Frame, Laptop, Phone, Shelf } from "./Props";
 import { CameraRig } from "./CameraRig";
 import { PALETTE } from "./stage";
+import { preloadModels } from "./Models";
+
+preloadModels();
 
 /**
  * Stage — the WebGL canvas with the whole majlis.
@@ -51,16 +54,15 @@ export function Stage({ quality, label }: { quality: "high" | "low"; label: stri
 
       <CameraRig interactive={high} />
 
-      <Room />
       <Avatar position={[-0.6, 0.22, -2.75]} />
-      <CoffeeTable position={[1.7, 0, -1.3]} />
-
+      <Phone position={[1.32, 0.507, -0.82]} />
       <Suspense fallback={null}>
+        <Room />
+        <CoffeeTable position={[1.7, 0, -1.3]} />
         <Laptop position={[-0.6, 0.235, -2.05]} />
         <Frame position={[4.93, 1.85, -1.0]} />
+        <Shelf position={[-4.78, 1.95, -1.5]} />
       </Suspense>
-      <Shelf position={[-4.78, 1.95, -1.5]} />
-      <Phone position={[1.25, 0.465, -0.72]} />
 
       {high && <ContactShadows position={[0, 0.01, -1]} opacity={0.35} scale={14} blur={2.2} far={3} color={PALETTE.ink} />}
     </Canvas>

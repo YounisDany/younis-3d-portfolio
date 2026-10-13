@@ -2,7 +2,8 @@ import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { PALETTE, stage } from "./stage";
-import { carpetTexture, stripeTexture } from "./textures";
+import { carpetTexture } from "./textures";
+import { Model, MODEL } from "./Models";
 
 /* ── Materials shared across the room ─────────────────────────────────── */
 
@@ -167,22 +168,6 @@ function Frieze({ width, position, rotation = [0, 0, 0] }: { width: number; posi
 
 /* ── Cushions ──────────────────────────────────────────────────────────── */
 
-function Backrest({ position, rotation = [0, 0, 0], color }: { position: [number, number, number]; rotation?: [number, number, number]; color: string }) {
-  const tex = useMemo(() => stripeTexture(color), [color]);
-  return (
-    <group position={position} rotation={rotation}>
-      <mesh castShadow>
-        <boxGeometry args={[1.55, 0.95, 0.26]} />
-        <meshStandardMaterial map={tex} roughness={0.9} />
-      </mesh>
-      <mesh position={[0, 0.5, 0]}>
-        <cylinderGeometry args={[0.13, 0.13, 1.5, 12]} />
-        <meshStandardMaterial color={PALETTE.chalk} roughness={0.9} />
-      </mesh>
-    </group>
-  );
-}
-
 function Mattress({ position, rotation = [0, 0, 0], length }: { position: [number, number, number]; rotation?: [number, number, number]; length: number }) {
   return (
     <group position={position} rotation={rotation}>
@@ -207,27 +192,7 @@ function ArmCushion({ position, color }: { position: [number, number, number]; c
   );
 }
 
-/* ── Plant + door + beams ──────────────────────────────────────────────── */
-
-function Plant({ position }: { position: [number, number, number] }) {
-  return (
-    <group position={position}>
-      <mesh position={[0, 0.25, 0]} castShadow>
-        <cylinderGeometry args={[0.22, 0.17, 0.5, 14]} />
-        <meshStandardMaterial color="#C8623A" roughness={0.9} />
-      </mesh>
-      {[0, 1, 2, 3, 4].map((i) => {
-        const a = (i / 5) * Math.PI * 2;
-        return (
-          <mesh key={i} position={[Math.cos(a) * 0.16, 0.85 + (i % 2) * 0.12, Math.sin(a) * 0.16]} rotation={[Math.cos(a) * 0.5, 0, Math.sin(a) * -0.5]} castShadow>
-            <coneGeometry args={[0.14, 0.75, 6]} />
-            <meshStandardMaterial color={i % 2 ? PALETTE.emerald : "#0A9A6E"} roughness={0.8} />
-          </mesh>
-        );
-      })}
-    </group>
-  );
-}
+/* ── Door + beams ──────────────────────────────────────────────── */
 
 function Door({ position }: { position: [number, number, number] }) {
   return (
@@ -349,20 +314,23 @@ export function Room() {
 
       {/* Seating along the back wall */}
       <Mattress position={[0, 0.11, -3.25]} length={8.6} />
-      {[-3.4, -1.7, 0, 1.7, 3.4].map((x, i) => (
-        <Backrest key={x} position={[x, 0.72, -3.78]} color={[PALETTE.ruby, PALETTE.saffron, PALETTE.cobalt, PALETTE.emerald, PALETTE.magenta][i]} />
+      {/* Real throw pillows as backrests along the back wall */}
+      {[-3.3, -1.65, 0, 1.65, 3.3].map((x, i) => (
+        <Model key={x} url={MODEL.pillows} position={[x, 0.2, -3.45]} rotation={[0, (i % 2 ? -1 : 1) * 0.08, 0]} scale={1.7} />
       ))}
       <ArmCushion position={[-4.1, 0.42, -3.25]} color={PALETTE.saffron} />
       <ArmCushion position={[4.1, 0.42, -3.25]} color={PALETTE.cobalt} />
 
       {/* Seating along the left wall */}
       <Mattress position={[-4.3, 0.11, -0.9]} rotation={[0, Math.PI / 2, 0]} length={3.6} />
-      {[-2.2, -0.5].map((z, i) => (
-        <Backrest key={z} position={[-4.8, 0.72, z + 0.6]} rotation={[0, Math.PI / 2, 0]} color={[PALETTE.cobalt, PALETTE.ruby][i]} />
+      {[-2.1, -0.2].map((z) => (
+        <Model key={z} url={MODEL.pillows} position={[-4.45, 0.2, z]} rotation={[0, Math.PI / 2, 0]} scale={1.6} />
       ))}
 
-      <Plant position={[4.1, 0, -3.1]} />
-      <Plant position={[-4.2, 0, 1.6]} />
+      <Model url={MODEL.plant} position={[4.2, 0, -3.1]} scale={1.35} rotation={[0, 0.6, 0]} />
+      <Model url={MODEL.plant} position={[-4.2, 0, 1.7]} scale={1.2} rotation={[0, -1.2, 0]} />
+      <Model url={MODEL.ottoman} position={[3.6, 0, 0.9]} scale={1.05} rotation={[0, -0.5, 0]} />
+      <Model url={MODEL.basket} position={[2.9, 0, -2.4]} scale={1.3} rotation={[0, 0.4, 0]} />
       <Door position={[4.97, 1.25, 2.1]} />
       <Drone />
 

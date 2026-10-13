@@ -3,7 +3,8 @@ import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { PALETTE, stage } from "./stage";
-import { labelTexture, phoneTexture, screenTexture } from "./textures";
+import { labelTexture, phoneTexture } from "./textures";
+import { Model, MODEL } from "./Models";
 import { Hotspot } from "./Hotspot";
 import { useLang } from "../i18n";
 import { publishedProjects } from "../content/projects";
@@ -15,6 +16,16 @@ const brass = new THREE.MeshStandardMaterial({ color: PALETTE.brass, metalness: 
 /* ── Low table with coffee ─────────────────────────────────────────────── */
 
 export function CoffeeTable({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position}>
+      <Model url={MODEL.table} scale={[1.0, 0.5, 1.0]} />
+      <Model url={MODEL.teaSet} position={[-0.05, 0.5, 0.02]} scale={0.95} rotation={[0, 0.3, 0]} />
+      <Model url={MODEL.brassPot} position={[0.42, 0.5, -0.3]} scale={0.75} />
+    </group>
+  );
+}
+
+export function LegacyCoffeeTable({ position }: { position: [number, number, number] }) {
   return (
     <group position={position}>
       <mesh position={[0, 0.42, 0]} castShadow receiveShadow material={wood}>
@@ -97,38 +108,15 @@ function HoloScreen({ url, index }: { url: string; index: number }) {
 
 export function Laptop({ position }: { position: [number, number, number] }) {
   const { t } = useLang();
-  const screen = useMemo(() => screenTexture(), []);
-  const glow = useRef<THREE.MeshStandardMaterial>(null);
   const arts = useMemo(
     () => publishedProjects.map((p) => getProjectArt(p.slug)).filter((a): a is string => Boolean(a)).slice(0, 3),
     [],
   );
 
-  useFrame((state) => {
-    if (glow.current) glow.current.emissiveIntensity = stage.live ? 0.9 + Math.sin(state.clock.elapsedTime * 2) * 0.1 : 0.15;
-  });
-
   return (
     <Hotspot id="laptop" to="/projects" label={t.room.laptop} position={position} ringRadius={0.7} labelOffset={[0, 1.15, 0.3]}>
       <group>
-        <mesh castShadow>
-          <boxGeometry args={[0.74, 0.03, 0.5]} />
-          <meshStandardMaterial color="#D9D6D0" metalness={0.5} roughness={0.35} />
-        </mesh>
-        <mesh position={[0, 0.02, 0.05]}>
-          <boxGeometry args={[0.58, 0.004, 0.24]} />
-          <meshStandardMaterial color="#2A2A30" roughness={0.6} />
-        </mesh>
-        <group position={[0, 0.015, -0.25]} rotation={[-1.25, 0, 0]}>
-          <mesh position={[0, 0.25, 0]} castShadow>
-            <boxGeometry args={[0.74, 0.5, 0.025]} />
-            <meshStandardMaterial color="#D9D6D0" metalness={0.5} roughness={0.35} />
-          </mesh>
-          <mesh position={[0, 0.25, 0.014]}>
-            <planeGeometry args={[0.68, 0.43]} />
-            <meshStandardMaterial ref={glow} map={screen} emissive="#ffffff" emissiveMap={screen} emissiveIntensity={0.9} toneMapped={false} />
-          </mesh>
-        </group>
+        <Model url={MODEL.laptop} scale={0.85} />
         <Float speed={1.6} rotationIntensity={0.15} floatIntensity={0.5}>
           {arts.map((url, i) => (
             <HoloScreen key={url} url={url} index={i} />
@@ -154,7 +142,7 @@ export function Phone({ position }: { position: [number, number, number] }) {
     g.current.rotation.z = Math.sin(tt * 40) * 0.05 * ring;
   });
   return (
-    <Hotspot id="phone" to="/contact" label={t.room.phone} position={position} ringRadius={0.34} ringY={0.47} labelOffset={[0, 0.5, 0]}>
+    <Hotspot id="phone" to="/contact" label={t.room.phone} position={position} ringRadius={0.34} ringY={0.505} labelOffset={[0, 0.5, 0]}>
       <group ref={g} rotation={[0, 0.5, 0]}>
         <mesh castShadow>
           <boxGeometry args={[0.18, 0.012, 0.36]} />
@@ -177,21 +165,15 @@ export function Frame({ position }: { position: [number, number, number] }) {
   return (
     <Hotspot id="frame" to="/about" label={t.room.frame} position={position} ringRadius={0.6} labelOffset={[-0.3, 0.9, 0]}>
       <group rotation={[0, -Math.PI / 2, 0]}>
-        <mesh castShadow>
-          <boxGeometry args={[0.96, 1.26, 0.06]} />
-          <meshStandardMaterial color={PALETTE.ink} roughness={0.5} />
-        </mesh>
-        <mesh position={[0, 0, 0.035]}>
-          <planeGeometry args={[0.8, 1.1]} />
-          <meshStandardMaterial color={PALETTE.chalk} />
-        </mesh>
-        <mesh position={[0, 0.05, 0.04]}>
-          <planeGeometry args={[0.7, 0.98]} />
+        <Model url={MODEL.frame} scale={1.6} position={[0, 0.05, 0]} />
+        {/* The portrait inside the real frame */}
+        <mesh position={[0, 0.0, 0.06]}>
+          <planeGeometry args={[0.62, 0.62]} />
           <meshStandardMaterial map={photo} roughness={0.8} />
         </mesh>
-        {/* Little sharp-shadow accent */}
-        <mesh position={[0.06, -0.06, -0.01]}>
-          <boxGeometry args={[0.96, 1.26, 0.02]} />
+        {/* Sharp accent shadow behind the frame */}
+        <mesh position={[0.08, -0.04, -0.015]}>
+          <planeGeometry args={[1.22, 0.82]} />
           <meshStandardMaterial color={PALETTE.ruby} />
         </mesh>
       </group>
@@ -210,36 +192,28 @@ export function Shelf({ position }: { position: [number, number, number] }) {
   return (
     <Hotspot id="shelf" to="/skills" label={t.room.shelf} position={position} ringRadius={0.7} labelOffset={[0.3, 0.7, 0]}>
       <group rotation={[0, Math.PI / 2, 0]}>
-        {/* Plank + brackets */}
-        <mesh material={wood} castShadow>
-          <boxGeometry args={[1.8, 0.05, 0.36]} />
-        </mesh>
-        {[-0.7, 0.7].map((x) => (
-          <mesh key={x} position={[x, -0.12, -0.12]} material={wood}>
-            <boxGeometry args={[0.05, 0.2, 0.1]} />
-          </mesh>
-        ))}
-        {/* Paint cans */}
-        {[PALETTE.ruby, PALETTE.cobalt, PALETTE.saffron].map((c, i) => (
-          <mesh key={c} position={[-0.68 + i * 0.2, 0.13, 0.02]} castShadow>
-            <cylinderGeometry args={[0.07, 0.07, 0.22, 14]} />
-            <meshStandardMaterial color={c} roughness={0.5} />
-          </mesh>
-        ))}
-        {/* Brush */}
-        <mesh position={[-0.3, 0.2, 0.08]} rotation={[0, 0, 0.5]}>
-          <cylinderGeometry args={[0.012, 0.012, 0.36, 8]} />
-          <meshStandardMaterial color={PALETTE.wood} />
-        </mesh>
-        {/* App tiles */}
+        {/* Real wooden display shelf standing against the wall */}
+        <Model url={MODEL.shelf} position={[0, -1.95, -0.2]} rotation={[0, Math.PI / 2, 0]} scale={1.15} />
+        {/* Top shelf: lanterns + basket */}
+        <Model url={MODEL.diyaLantern} position={[-0.55, -0.62, -0.2]} scale={0.9} />
+        <Model url={MODEL.lantern} position={[0.1, -0.62, -0.2]} scale={1.1} rotation={[0, 0.5, 0]} />
+        <Model url={MODEL.basket} position={[0.6, -0.62, -0.2]} scale={0.9} rotation={[0, 0.3, 0]} />
+        {/* Middle shelf: design + code tiles */}
         {labels.map((tex, i) => (
-          <mesh key={i} position={[0.0 + i * 0.26, 0.14, 0.04]} rotation={[0, 0, 0]} castShadow>
-            <boxGeometry args={[0.22, 0.22, 0.06]} />
+          <mesh key={i} position={[-0.5 + i * 0.3, -0.08, -0.2]} castShadow>
+            <boxGeometry args={[0.24, 0.24, 0.07]} />
             <meshStandardMaterial map={tex} roughness={0.4} />
           </mesh>
         ))}
+        {/* Paint cans next to the tiles */}
+        {[PALETTE.ruby, PALETTE.cobalt, PALETTE.saffron].map((c, i) => (
+          <mesh key={c} position={[-0.6 + i * 0.17, -1.08, -0.2]} castShadow>
+            <cylinderGeometry args={[0.065, 0.065, 0.2, 14]} />
+            <meshStandardMaterial color={c} roughness={0.5} />
+          </mesh>
+        ))}
         {/* Tiny server box with blinking LEDs */}
-        <ServerBox position={[0.72, 0.1, 0.0]} />
+        <ServerBox position={[0.45, -1.1, -0.2]} />
       </group>
     </Hotspot>
   );
